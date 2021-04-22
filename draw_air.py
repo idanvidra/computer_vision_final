@@ -68,11 +68,12 @@ while True:
         if stp == 0:
             mask = cv2.line(mask, (a,b), (x,y), (0,0,255), 6)
 
+        if x > a + 10: print("moved right")
+        if x < a - 10: print("moved left " + str(x - a))
+
         cv2.circle(new_inp_img, (x,y), 6, (0,255,0), -1)
     
     new_inp_img = cv2.addWeighted(mask, 0.3, new_inp_img, 0.7, 0)
-    cv2.putText(mask, "'q' to gap 'w' - start 'n' - clear", (10,50), 
-                cv2.FONT_HERSHEY_PLAIN, 2, (255,255,255))
     cv2.imshow("ouput", new_inp_img)
     cv2.imshow("result", mask)
 
