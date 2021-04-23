@@ -1,12 +1,18 @@
 import cv2
 import numpy as np
+from my_constants import *
 
+from arm_movement_control import ArmMotorControl
 #### global ####
 x,y,k = 200,200,-1
 
 cap = cv2.VideoCapture(0)
 
 ################################################
+############# arm ctrl #########################
+arm = ArmMotorControl()
+arm.set_moving_speed(MOTOR_NAME, 120)
+arm.set_acceleration(MOTOR_NAME, 2)
 
 ############# func def #########################
 def take_inp(event, x1, y1, flag, param):
@@ -68,8 +74,12 @@ while True:
         if stp == 0:
             mask = cv2.line(mask, (a,b), (x,y), (0,0,255), 6)
 
-        if x > a + 10: print("moved right")
-        if x < a - 10: print("moved left " + str(x - a))
+        if x > a + 10: 
+            print("moved right")
+            arm.turn_clockwise(MOTOR_NAME)
+        if x < a - 10: 
+            print("moved left ")
+            arm.turn_counter_clockwise(MOTOR_NAME)
 
         cv2.circle(new_inp_img, (x,y), 6, (0,255,0), -1)
     

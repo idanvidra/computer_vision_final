@@ -323,4 +323,4 @@ def main(video, device):
 
 
 # call function
-main(video=r"D:\Program Files (x86)\Steam\steamapps\common\SUPERHOT\SH_Data\StreamingAssets\Movies\ss2.mp4", device="cpu")
+main(video=r"D:\Program Files (x86)\Steam\steamapps\common\SUPERHOT\SH_Data\StreamingAssets\Movies\ss2.mp4", device="gpu")
