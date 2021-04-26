@@ -1,5 +1,5 @@
 from butter_connector import ButterConnector
-from my_constants import *
+from constants import *
 import sys
 
 
