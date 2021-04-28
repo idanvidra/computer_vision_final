@@ -24,3 +24,4 @@ def check_movement(x, ox, sensativity=10, arm=None):
     if x < ox - sensativity: 
         print("moved left ")
         # arm.turn_counter_clockwise(MOTOR_NAME)
+
