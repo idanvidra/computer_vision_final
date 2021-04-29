@@ -18,4 +18,6 @@ THIRD_CIRCLE = int(FULL_CIRCLE / 3)
 
 STEP = 100
 
-OF_CRITERIA = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT,15, 0.08)
+lk_params = dict( winSize  = (13, 13),
+                  maxLevel = 1,
+                  criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 15, 0.08))
