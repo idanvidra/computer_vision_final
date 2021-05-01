@@ -1,5 +1,6 @@
 from draw_tracking import *
 from draw_optical_flow import *
+from draw_optical_flow_advanced import *
 
 
 class Running_Mode:
@@ -14,5 +15,8 @@ class Running_Mode:
         elif running_type == "tracking":
             dt = draw_tracker()
             dt.start()
+        elif running_type == "optical flow advanced":
+            dopa = App()
+            dopa.run()
         else:
             print("please enter running mode: optical flow or tracking")
