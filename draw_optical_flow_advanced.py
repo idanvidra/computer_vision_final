@@ -4,7 +4,7 @@ import cv2 as cv
 from constants import *
 from utilities import *
 
-sensitivity = 1
+sensitivity = 5
 
 class optical_flow_advanced_tracker:
     def __init__(self):
@@ -17,6 +17,7 @@ class optical_flow_advanced_tracker:
     def start(self):
         while True:
             _ret, frame = self.cam.read()
+            frame = cv2.flip(frame, 1)
             frame_gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
             vis = frame.copy()
 
@@ -31,7 +32,7 @@ class optical_flow_advanced_tracker:
                 dd = (p1-p0).reshape(-1, 2).mean(axis=0)[0]
 
                 # moving condition
-                check_movement(d=dd, sensativity=1)
+                check_movement(d=dd, sensativity=sensitivity)
 
                 good = d < 1
                 new_tracks = []
