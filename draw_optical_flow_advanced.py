@@ -6,15 +6,6 @@ from utilities import *
 
 sensitivity = 1
 
-# lk_params_advanced = dict( winSize  = (15, 15),
-#                   maxLevel = 2,
-#                   criteria = (cv.TERM_CRITERIA_EPS | cv.TERM_CRITERIA_COUNT, 10, 0.03))
-
-feature_params = dict( maxCorners = 10,
-                       qualityLevel = 0.3,
-                       minDistance = 7,
-                       blockSize = 7 )
-
 class optical_flow_advanced_tracker:
     def __init__(self):
         self.track_len = 10
