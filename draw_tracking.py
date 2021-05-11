@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+
 from utilities import *
 
 
@@ -7,7 +8,7 @@ class draw_tracker:
 
     def __init__(self):
         # robot arm control
-        # self.arm = init_arm()
+        self.arm = init_arm()
         a=5
 
     # default called trackbar function 
@@ -40,9 +41,12 @@ class draw_tracker:
         # Loading the default webcam of PC.
         cap = cv2.VideoCapture(0)
 
-        # init random starting coordinates
+        # init starting coordinates
         ox, oy = 250,250
+        x,y=0,0
         previous_coordinates = coordinate_shaper(ox,oy)
+
+        
 
         # Keep looping
         while True:
@@ -84,6 +88,7 @@ class draw_tracker:
                 cv2.CHAIN_APPROX_SIMPLE)
             center = None
 
+            
             # If the contours are formed
             if len(cnts) > 0:
                 
@@ -101,7 +106,6 @@ class draw_tracker:
                 # Calculating the center of the detected contour
                 M = cv2.moments(cnt)
                 center = (int(M['m10'] / M['m00']), int(M['m01'] / M['m00']))
-                
 
             current_coordinates = coordinate_shaper(x,y)
             for i, j in zip(previous_coordinates, current_coordinates):
@@ -110,8 +114,11 @@ class draw_tracker:
 
                 cv2.line(frame, (ox,oy), (x,y), (0,0,255), 2)
 
+                # calculate difference
+                d = x - ox
+
                 # moving condition
-                check_movement(x=x, ox=ox, sensativity=10)
+                check_movement(d=d, sensativity=2, arm=self.arm)
 
             previous_coordinates = current_coordinates.reshape(-1,1,2)
                 
@@ -127,3 +134,12 @@ class draw_tracker:
         # Release the camera and all resources
         cap.release()
         cv2.destroyAllWindows()
+
+def main():
+    draw_tracker().start()
+    print('Done')
+
+
+if __name__ == '__main__':
+    main()
+    cv2.destroyAllWindows()

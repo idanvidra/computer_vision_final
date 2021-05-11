@@ -12,14 +12,13 @@ class optical_flow_tracker:
         self.stage = -1
         self.video_capture = cv2.VideoCapture(0)
         # # robot arm control
-        # self.arm = init_arm()
+        self.arm = init_arm()
 
     def start(self):
 
         # mouse click handler for initial tracking coordinate selection
         def mouse_click_input_handler(event, clicked_x, clicked_y, flag, parameter):
             if event == cv2.EVENT_LBUTTONDOWN:
-                # global x,y,stage
                 self.x = clicked_x
                 self.y = clicked_y
                 self.stage = 1
@@ -70,8 +69,11 @@ class optical_flow_tracker:
                 mask = cv2.line(mask, (ox,oy), (x,y), (0,0,255), 5)
                 cv2.circle(current_video_image, (x,y), 6, (0,255,0), -1)
 
+                # calculate difference
+                d = x - ox
+
                 # moving condition
-                check_movement(x=x, ox=ox, sensativity=10)
+                check_movement(d=d, sensativity=10, arm=self.arm)
                 
 
             # show changes on image
@@ -90,3 +92,12 @@ class optical_flow_tracker:
 
         cv2.destroyAllWindows()
         self.video_capture.release()
+
+def main():
+    optical_flow_tracker().start()
+    print('Done')
+
+
+if __name__ == '__main__':
+    main()
+    cv2.destroyAllWindows()

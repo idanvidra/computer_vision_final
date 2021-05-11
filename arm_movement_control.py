@@ -13,8 +13,9 @@ class ArmMotorControl:
         
     def parse_position(self, response):
         try:
-            response = response['Result']
-            response = response.split('|')[1].strip()
+            # response = response['Result']
+            # response = response.split('|')[1].strip()
+            response = response['response']['data']
             return int(response)
         except:
             e = sys.exc_info()[0]
@@ -24,7 +25,7 @@ class ArmMotorControl:
         result = self.butterHttpClient.getMotorRegister(motor_name, 'present-position').json()
         print(result)
 
-        while result['Executed'] == False:
+        while result['executed'] == False:
             result = self.butterHttpClient.getMotorRegister(motor_name, 'present-position').json()
         
         position_str = self.parse_position(result)
@@ -35,20 +36,27 @@ class ArmMotorControl:
         pres_pos = self.get_present_position(motor_name)
         return pres_pos
 
-    def turn_clockwise(self, motor_name):
+    def turn_clockwise(self, motor_name, movement=STEP):
         pres_pos = self.turn_setup(motor_name)
-        goal_pos = int(pres_pos) + STEP
+        goal_pos = int(pres_pos) + movement
         print(pres_pos, goal_pos)
         self.butterHttpClient.setMotorRegister(motor_name, 'goal-position', str(goal_pos))
 
-    def turn_counter_clockwise(self, motor_name):
+    def turn_counter_clockwise(self, motor_name, movement=STEP):
         pres_pos = self.turn_setup(motor_name)
-        goal_pos = int(pres_pos) - STEP
+        goal_pos = int(pres_pos) - movement
         self.butterHttpClient.setMotorRegister(motor_name, 'goal-position', str(goal_pos))
 
     def turn_full_circle(self, motor_name):
         pres_pos = self.turn_setup(motor_name)
         goal_pos = int(pres_pos) - FULL_CIRCLE
+        self.butterHttpClient.setMotorRegister(motor_name, 'goal-position', str(goal_pos))
+
+    def target_1(self, motor_name):
+        goal_pos = int(2245)
+        self.butterHttpClient.setMotorRegister(motor_name, 'goal-position', str(goal_pos))
+    def target_2(self, motor_name):
+        goal_pos = int(1865)
         self.butterHttpClient.setMotorRegister(motor_name, 'goal-position', str(goal_pos))
 
     def set_acceleration(self, motor_name, value):

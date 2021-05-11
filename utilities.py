@@ -17,11 +17,21 @@ def coordinate_shaper(x,y):
 
 # compares x coordinates to check for movement and direction (x axis only) on camera
 # if movement was detected the arm is moved accordingly
-def check_movement(x, ox, sensativity=10, arm=None):
-    if x > ox + sensativity: 
-        print("moved right")
-        # arm.turn_clockwise(MOTOR_NAME)
-    if x < ox - sensativity: 
-        print("moved left ")
-        # arm.turn_counter_clockwise(MOTOR_NAME)
+# def check_movement(x, ox, sensativity=10, arm=None):
+#     if x > ox + sensativity: 
+#         print("moved right")
+#         # arm.turn_clockwise(MOTOR_NAME)
+#     if x < ox - sensativity: 
+#         print("moved left ")
+#         # arm.turn_counter_clockwise(MOTOR_NAME)
 
+
+def check_movement(d, sensativity=10, arm=None):
+    movement = int(30*abs(np.ceil(d)))
+    if d > sensativity: 
+        print("moved right")
+        arm.turn_clockwise(MOTOR_NAME,movement)
+    if d < - sensativity: 
+        print("moved left ")
+        
+        arm.turn_counter_clockwise(MOTOR_NAME, movement)

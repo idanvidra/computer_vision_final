@@ -6,4 +6,4 @@ from running_mode import *
 # 2. tracking
 # 3. optical flow advanced
 rm =  Running_Mode()
-rm.start("tracking")
+rm.start("optical flow advanced")

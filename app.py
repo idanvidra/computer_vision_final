@@ -1,22 +1,3 @@
-# import numpy as np 
-# import cv2
-
-# frame1 = (cv2.imread('Images\\basketball_1.png', cv2.IMREAD_GRAYSCALE))
-# frame2 = (cv2.imread('Images\\basketball_2.png', cv2.IMREAD_GRAYSCALE))
-
-# nvof = cv2.cuda_NvidiaOpticalFlow_1_0.create(frame1.shape[1], frame1.shape[0], 5, False, False, False, 0)
-
-# flow = nvof.calc(frame1, frame2, None)
-
-# flowUpSampled = nvof.upSampler(flow[0], frame1.shape[1], frame1.shape[0], nvof.getGridSize(), None)
-
-# cv2.writeOpticalFlow('OpticalFlow.flo', flowUpSampled)
-
-# nvof.collectGarbage()
-
-
-# Video and its attributes
-# cap = cv2.VideoCapture(r"D:\Program Files (x86)\Steam\steamapps\common\SUPERHOT\SH_Data\StreamingAssets\Movies\ss8.mp4")
 import argparse
 import time
 
@@ -154,149 +135,149 @@ def main(video, device):
                 if k == 27:
                     break
 
-    else:
+    # else:
 
-        # proceed if frame reading was successful
-        if ret:
-            # resize frame
-            frame = cv2.resize(previous_frame, (960, 540))
+    #     # proceed if frame reading was successful
+    #     if ret:
+    #         # resize frame
+    #         frame = cv2.resize(previous_frame, (960, 540))
 
-            # upload resized frame to GPU
-            gpu_frame = cv2.cuda_GpuMat()
-            gpu_frame.upload(frame)
+    #         # upload resized frame to GPU
+    #         gpu_frame = cv2.cuda_GpuMat()
+    #         gpu_frame.upload(frame)
 
-            # convert to gray
-            previous_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    #         # convert to gray
+    #         previous_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-            # upload pre-processed frame to GPU
-            gpu_previous = cv2.cuda_GpuMat()
-            gpu_previous.upload(previous_frame)
+    #         # upload pre-processed frame to GPU
+    #         gpu_previous = cv2.cuda_GpuMat()
+    #         gpu_previous.upload(previous_frame)
 
-            # create gpu_hsv output for optical flow
-            gpu_hsv = cv2.cuda_GpuMat(gpu_frame.size(), cv2.CV_32FC3)
-            gpu_hsv_8u = cv2.cuda_GpuMat(gpu_frame.size(), cv2.CV_8UC3)
+    #         # create gpu_hsv output for optical flow
+    #         gpu_hsv = cv2.cuda_GpuMat(gpu_frame.size(), cv2.CV_32FC3)
+    #         gpu_hsv_8u = cv2.cuda_GpuMat(gpu_frame.size(), cv2.CV_8UC3)
 
-            gpu_h = cv2.cuda_GpuMat(gpu_frame.size(), cv2.CV_32FC1)
-            gpu_s = cv2.cuda_GpuMat(gpu_frame.size(), cv2.CV_32FC1)
-            gpu_v = cv2.cuda_GpuMat(gpu_frame.size(), cv2.CV_32FC1)
+    #         gpu_h = cv2.cuda_GpuMat(gpu_frame.size(), cv2.CV_32FC1)
+    #         gpu_s = cv2.cuda_GpuMat(gpu_frame.size(), cv2.CV_32FC1)
+    #         gpu_v = cv2.cuda_GpuMat(gpu_frame.size(), cv2.CV_32FC1)
 
-            # set saturation to 1
-            gpu_s.upload(np.ones_like(previous_frame, np.float32))
+    #         # set saturation to 1
+    #         gpu_s.upload(np.ones_like(previous_frame, np.float32))
 
-            while True:
-                # start full pipeline timer
-                start_full_time = time.time()
+    #         while True:
+    #             # start full pipeline timer
+    #             start_full_time = time.time()
 
-                # start reading timer
-                start_read_time = time.time()
+    #             # start reading timer
+    #             start_read_time = time.time()
 
-                # capture frame-by-frame
-                ret, frame = cap.read()
+    #             # capture frame-by-frame
+    #             ret, frame = cap.read()
 
-                # upload frame to GPU
-                gpu_frame.upload(frame)
+    #             # upload frame to GPU
+    #             gpu_frame.upload(frame)
 
-                # end reading timer
-                end_read_time = time.time()
+    #             # end reading timer
+    #             end_read_time = time.time()
 
-                # add elapsed iteration time
-                timers["reading"].append(end_read_time - start_read_time)
+    #             # add elapsed iteration time
+    #             timers["reading"].append(end_read_time - start_read_time)
 
-                # if frame reading was not successful, break
-                if not ret:
-                    break
+    #             # if frame reading was not successful, break
+    #             if not ret:
+    #                 break
 
-                # start pre-process timer
-                start_pre_time = time.time()
+    #             # start pre-process timer
+    #             start_pre_time = time.time()
 
-                # resize frame
-                gpu_frame = cv2.cuda.resize(gpu_frame, (960, 540))
+    #             # resize frame
+    #             gpu_frame = cv2.cuda.resize(gpu_frame, (960, 540))
 
-                # convert to gray
-                gpu_current = cv2.cuda.cvtColor(gpu_frame, cv2.COLOR_BGR2GRAY)
+    #             # convert to gray
+    #             gpu_current = cv2.cuda.cvtColor(gpu_frame, cv2.COLOR_BGR2GRAY)
 
-                # end pre-process timer
-                end_pre_time = time.time()
+    #             # end pre-process timer
+    #             end_pre_time = time.time()
 
-                # add elapsed iteration time
-                timers["pre-process"].append(end_pre_time - start_pre_time)
+    #             # add elapsed iteration time
+    #             timers["pre-process"].append(end_pre_time - start_pre_time)
 
-                # start optical flow timer
-                start_of = time.time()
+    #             # start optical flow timer
+    #             start_of = time.time()
 
-                # create optical flow instance
-                gpu_flow = cv2.cuda_FarnebackOpticalFlow.create(
-                    5, 0.5, False, 15, 3, 5, 1.2, 0,
-                )
-                # calculate optical flow
-                gpu_flow = cv2.cuda_FarnebackOpticalFlow.calc(
-                    gpu_flow, gpu_previous, gpu_current, None,
-                )
+    #             # create optical flow instance
+    #             gpu_flow = cv2.cuda_FarnebackOpticalFlow.create(
+    #                 5, 0.5, False, 15, 3, 5, 1.2, 0,
+    #             )
+    #             # calculate optical flow
+    #             gpu_flow = cv2.cuda_FarnebackOpticalFlow.calc(
+    #                 gpu_flow, gpu_previous, gpu_current, None,
+    #             )
 
-                # end of timer
-                end_of = time.time()
+    #             # end of timer
+    #             end_of = time.time()
 
-                # add elapsed iteration time
-                timers["optical flow"].append(end_of - start_of)
+    #             # add elapsed iteration time
+    #             timers["optical flow"].append(end_of - start_of)
 
-                # start post-process timer
-                start_post_time = time.time()
+    #             # start post-process timer
+    #             start_post_time = time.time()
 
-                gpu_flow_x = cv2.cuda_GpuMat(gpu_flow.size(), cv2.CV_32FC1)
-                gpu_flow_y = cv2.cuda_GpuMat(gpu_flow.size(), cv2.CV_32FC1)
-                cv2.cuda.split(gpu_flow, [gpu_flow_x, gpu_flow_y])
+    #             gpu_flow_x = cv2.cuda_GpuMat(gpu_flow.size(), cv2.CV_32FC1)
+    #             gpu_flow_y = cv2.cuda_GpuMat(gpu_flow.size(), cv2.CV_32FC1)
+    #             cv2.cuda.split(gpu_flow, [gpu_flow_x, gpu_flow_y])
 
-                # convert from cartesian to polar coordinates to get magnitude and angle
-                gpu_magnitude, gpu_angle = cv2.cuda.cartToPolar(
-                    gpu_flow_x, gpu_flow_y, angleInDegrees=True,
-                )
+    #             # convert from cartesian to polar coordinates to get magnitude and angle
+    #             gpu_magnitude, gpu_angle = cv2.cuda.cartToPolar(
+    #                 gpu_flow_x, gpu_flow_y, angleInDegrees=True,
+    #             )
 
-                # set value to normalized magnitude from 0 to 1
-                gpu_v = cv2.cuda.normalize(gpu_magnitude, 0.0, 1.0, cv2.NORM_MINMAX, -1)
+    #             # set value to normalized magnitude from 0 to 1
+    #             gpu_v = cv2.cuda.normalize(gpu_magnitude, 0.0, 1.0, cv2.NORM_MINMAX, -1)
 
-                # get angle of optical flow
-                angle = gpu_angle.download()
-                angle *= (1 / 360.0) * (180 / 255.0)
+    #             # get angle of optical flow
+    #             angle = gpu_angle.download()
+    #             angle *= (1 / 360.0) * (180 / 255.0)
 
-                # set hue according to the angle of optical flow
-                gpu_h.upload(angle)
+    #             # set hue according to the angle of optical flow
+    #             gpu_h.upload(angle)
 
-                # merge h,s,v channels
-                cv2.cuda.merge([gpu_h, gpu_s, gpu_v], gpu_hsv)
+    #             # merge h,s,v channels
+    #             cv2.cuda.merge([gpu_h, gpu_s, gpu_v], gpu_hsv)
 
-                # multiply each pixel value to 255
-                gpu_hsv.convertTo(cv2.CV_8U, 255.0, gpu_hsv_8u, 0.0)
+    #             # multiply each pixel value to 255
+    #             gpu_hsv.convertTo(cv2.CV_8U, 255.0, gpu_hsv_8u, 0.0)
 
-                # convert hsv to bgr
-                gpu_bgr = cv2.cuda.cvtColor(gpu_hsv_8u, cv2.COLOR_HSV2BGR)
+    #             # convert hsv to bgr
+    #             gpu_bgr = cv2.cuda.cvtColor(gpu_hsv_8u, cv2.COLOR_HSV2BGR)
 
-                # send original frame from GPU back to CPU
-                frame = gpu_frame.download()
+    #             # send original frame from GPU back to CPU
+    #             frame = gpu_frame.download()
 
-                # send result from GPU back to CPU
-                bgr = gpu_bgr.download()
+    #             # send result from GPU back to CPU
+    #             bgr = gpu_bgr.download()
 
-                # update previous_frame value
-                gpu_previous = gpu_current
+    #             # update previous_frame value
+    #             gpu_previous = gpu_current
 
-                # end post-process timer
-                end_post_time = time.time()
+    #             # end post-process timer
+    #             end_post_time = time.time()
 
-                # add elapsed iteration time
-                timers["post-process"].append(end_post_time - start_post_time)
+    #             # add elapsed iteration time
+    #             timers["post-process"].append(end_post_time - start_post_time)
 
-                # end full pipeline timer
-                end_full_time = time.time()
+    #             # end full pipeline timer
+    #             end_full_time = time.time()
 
-                # add elapsed iteration time
-                timers["full pipeline"].append(end_full_time - start_full_time)
+    #             # add elapsed iteration time
+    #             timers["full pipeline"].append(end_full_time - start_full_time)
 
-                # visualization
-                cv2.imshow("original", frame)
-                cv2.imshow("result", bgr)
-                k = cv2.waitKey(1)
-                if k == 27:
-                    break
+    #             # visualization
+    #             cv2.imshow("original", frame)
+    #             cv2.imshow("result", bgr)
+    #             k = cv2.waitKey(1)
+    #             if k == 27:
+    #                 break
 
     # release the capture
     cap.release()

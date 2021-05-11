@@ -4,7 +4,7 @@ import cv2 as cv
 from constants import *
 from utilities import *
 
-sensitivity = 5
+sensitivity = 2.5
 
 class optical_flow_advanced_tracker:
     def __init__(self):
@@ -13,6 +13,7 @@ class optical_flow_advanced_tracker:
         self.tracks = []
         self.cam = cv.VideoCapture(0)
         self.frame_idx = 0
+        self.arm = init_arm()
 
     def start(self):
         while True:
@@ -32,7 +33,7 @@ class optical_flow_advanced_tracker:
                 dd = (p1-p0).reshape(-1, 2).mean(axis=0)[0]
 
                 # moving condition
-                check_movement(d=dd, sensativity=sensitivity)
+                check_movement(d=dd, sensativity=sensitivity, arm=self.arm)
 
                 good = d < 1
                 new_tracks = []
@@ -47,7 +48,6 @@ class optical_flow_advanced_tracker:
 
                 self.tracks = new_tracks
                 cv.polylines(vis, [np.int32(tr) for tr in self.tracks], False, (0, 255, 0))
-                # draw_str(vis, (20, 20), 'track count: %d' % len(self.tracks))
 
             if self.frame_idx % self.detect_interval == 0:
                 mask = np.zeros_like(frame_gray)
