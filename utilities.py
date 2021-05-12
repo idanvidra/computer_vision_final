@@ -15,18 +15,12 @@ def init_arm(speed = 120, acceleration = 2):
 def coordinate_shaper(x,y):
     return np.array([[x, y]], dtype=np.float32).reshape(-1,1,2)
 
-# compares x coordinates to check for movement and direction (x axis only) on camera
-# if movement was detected the arm is moved accordingly
-# def check_movement(x, ox, sensativity=10, arm=None):
-#     if x > ox + sensativity: 
-#         print("moved right")
-#         # arm.turn_clockwise(MOTOR_NAME)
-#     if x < ox - sensativity: 
-#         print("moved left ")
-#         # arm.turn_counter_clockwise(MOTOR_NAME)
 
-
+# check distance given and move KIP accordingly
 def check_movement(d, sensativity=10, arm=None):
+
+    # we multiply by 30 to make up for the difference between dynamixell and pixel 
+    # diffreneces - where dynamixell is the measurement for the robots motors
     movement = int(30*abs(np.ceil(d)))
     if d > sensativity: 
         print("moved right")

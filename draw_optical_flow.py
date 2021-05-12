@@ -3,6 +3,12 @@ import numpy as np
 from constants import *
 from utilities import *
 
+# this was our initial try at making an optical flow tracker
+# the algorithm work like so:
+# you chose a point to follow and all the tracking will be done on that point.
+# this has shown to be problematic with differently lit rooms and so we moved to 
+# Optical flow advanced.
+
 
 class optical_flow_tracker:
 
